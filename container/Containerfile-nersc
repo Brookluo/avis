@@ -1,0 +1,18 @@
+
+FROM docker.io/nersc/pytorch:24.08.02
+
+# remember to install astropy, cv2 (opencv-python)...
+RUN pip install astropy opencv-python mpi4py fitsio healpy
+RUN mkdir /desihub
+WORKDIR /desihub
+
+RUN git clone https://github.com/desihub/desispec.git \
+    && git clone https://github.com/desihub/desiutil.git
+    # && git clone https://github.com/desihub/desitarget.git \
+    # && git clone https://github.com/desihub/desimodel.git
+
+WORKDIR /desihub/desiutil
+RUN pip install .
+WORKDIR /desihub/desispec
+RUN pip install -r requirements.txt
+RUN pip install .

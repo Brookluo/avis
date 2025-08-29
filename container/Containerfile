@@ -1,0 +1,22 @@
+# On NSERC CUDA info on 07/21/2023: 
+# NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0
+# https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-23-02.html
+FROM nvcr.io/nvidia/pytorch:23.02-py3
+
+# remember to install astropy, cv2 (opencv-python)...
+RUN pip install astropy opencv-python mpi4py fitsio healpy
+RUN mkdir /desihub
+WORKDIR /desihub
+
+RUN git clone https://github.com/desihub/desispec.git \
+    && git clone https://github.com/desihub/desiutil.git
+    # && git clone https://github.com/desihub/desitarget.git \
+    # && git clone https://github.com/desihub/desimodel.git
+
+WORKDIR /desihub/desiutil
+RUN pip install .
+WORKDIR /desihub/desispec
+RUN pip install -r requirements.txt
+RUN pip install .
+
+# ENV PYTHONPATH=$PYTHONPATH:/desihub/desispec/py
